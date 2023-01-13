@@ -4,54 +4,52 @@
 #include "mapa.h"
 
 MAPA m;
+POSICAO heroi;
 
-int acabou (){
-    return 0;
+
+int acabou() {
+	return 0;
 }
 
-void move (char direcao){
-    int x;
-    int y;
+void move(char direcao) {
 
-    for (int i = 0; i < m.linhas; i++){
-        for (int j = 0; j < m.colunas; j++){
-            if (m.matriz[i][j] == '@'){
-                x = i;
-                y = j;
-                break;
-            }
-        }
-    }
+	m.matriz[heroi.x][heroi.y] = '.';
 
-    switch (direcao){
-        case 'a':
-            m.matriz [x][y-1] = '@';
-            break;
-        case 'w':
-            m.matriz [x-1][y] = '@';
-            break;
-        case 's':
-            m.matriz [x+1][y] = '@';
-            break;
-        case 'd':
-            m.matriz [x][y+1] = '@';
-            break;
-    }
-
-    m.matriz[x][y] = '.';
+	switch(direcao) {
+		case 'a':
+			m.matriz[heroi.x][heroi.y-1] = '@';
+			heroi.y--;
+			break;
+		case 'w':
+			m.matriz[heroi.x-1][heroi.y] = '@';
+			heroi.x--;
+			break;
+		case 's':
+			m.matriz[heroi.x+1][heroi.y] = '@';
+			heroi.x++;
+			break;
+		case 'd':
+			m.matriz[heroi.x][heroi.y+1] = '@';
+			heroi.y++;
+			break;
+	}
+	
 }
 
-int main (){
+int main() {
+	
+	lemapa(&m);
+	encontramapa(&m, &heroi, '@');
 
-    lemapa(&m);
+	do {
+		imprimemapa(&m);
 
-    do {
-        imprimemapa(&m);
-        char comando;
-        scanf (" %c", &comando);
-        move (comando); 
+		char comando;
+		scanf(" %c", &comando);
 
-    } while (!acabou());
+		move(comando);
 
-    liberamapa(&m);
+	} while (!acabou());
+
+	liberamapa(&m);
 }
