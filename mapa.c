@@ -2,25 +2,6 @@
 #include <stdlib.h>
 #include "mapa.h"
 
-void andandonomapa (MAPA* m, int xorigem, int yorigem, int xdestino, int ydestino){
-    char personagem  = m->matriz[xorigem][yorigem];
-    m->matriz[xdestino][ydestino] = personagem;
-    m->matriz[xorigem][yorigem] = '.';
-}
-
-int ehvalida (MAPA* m, int x, int y){
-    if (x >= m->linhas)
-        return 0;
-    if (y >= m->colunas)
-        return 0;
-
-    return 1;
-}
-
-int ehvazia (MAPA* m, int x, int y){
-    return m->matriz[x][y] == '.';
-}
-
 void lemapa(MAPA* m){
 	FILE* f;
 	f = fopen("mapa.txt", "r");
@@ -73,4 +54,24 @@ void encontramapa(MAPA* m, POSICAO* p, char c){
 		}
 	}
 
+}
+
+int ehvalida (MAPA* m, int x, int y){
+    if (x >= m->linhas)
+        return 0;
+    if (y >= m->colunas)
+        return 0;
+
+    return 1;
+}
+
+int ehvazia (MAPA* m, int x, int y){
+    return m->matriz[x][y] == VAZIO;
+}
+
+
+void andandonomapa (MAPA* m, int xorigem, int yorigem, int xdestino, int ydestino){
+    char personagem  = m->matriz[xorigem][yorigem];
+    m->matriz[xdestino][ydestino] = personagem;
+    m->matriz[xorigem][yorigem] = VAZIO;
 }
