@@ -10,16 +10,16 @@ POSICAO heroi;
 int praondefantasmavai (int xatual, int yatual, int* xdestino, int* ydestino){
 	int opcoes [4][2] = {
 		{ xatual, yatual+1},
-		{ xatual + 1, yatual},
+		{ xatual+1, yatual},
 		{ xatual, yatual-1},
-		{ xatual - 1, yatual}	
+		{ xatual-1, yatual}	
 	};
 
 	srand (time(0));
 	for (int i = 0; i < 10; i++){
 		int posicao = rand() % 4;
 		 
-		if (ehvalida(&m, opcoes[posicao][0], opcoes[posicao][1]) && ehvazia(&m, opcoes[posicao][0], opcoes[posicao][1])){
+		if (podeandar(&m, FANTASMA, opcoes[posicao][0], opcoes[posicao][1])){
 			*xdestino = opcoes [posicao][0];
 			*ydestino = opcoes [posicao][1];
 		
@@ -35,8 +35,8 @@ void fantasmas (){
 
 	copiamapa(&copia, &m);
 
-	for (int i = 0; i < m.linhas; i++){
-		for (int j = 0; j < m.colunas; j++){
+	for (int i = 0; i < copia.linhas; i++){
+		for (int j = 0; j < copia.colunas; j++){
 			if (copia.matriz[i][j] == FANTASMA){
 
 				int xdestino;
@@ -55,14 +55,20 @@ void fantasmas (){
 }
 
 int acabou() {
-	return 0;
+    POSICAO pos;
+
+    int perdeu = !encontramapa(&m, &pos, HEROI);
+    int ganhou = !encontramapa(&m, &pos, FANTASMA);
+
+    return ganhou || perdeu;
+
 }
 
 int ehdirecao(char direcao){
     return direcao == 'a' ||
-        direcao == 'w' ||
-        direcao == 's' ||
-        direcao == 'd';
+           direcao == 'w' ||
+       	   direcao == 's' ||
+       	   direcao == 'd';
 }
 
 void move(char direcao) {
@@ -88,10 +94,7 @@ void move(char direcao) {
 			break;
 	}
 
-    if(!ehvalida(&m, proximox, proximoy))
-        return;
-
-    if (!ehvazia(&m, proximox, proximoy))
+    if(!podeandar(&m, HEROI, proximox, proximoy))
         return;
 
     andandonomapa (&m, heroi.x, heroi.y, proximox, proximoy);
